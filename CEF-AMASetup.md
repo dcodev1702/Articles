@@ -115,11 +115,3 @@ Azure Government
 sudo wget -O cef_AMA_troubleshoot.py https://raw.githubusercontent.com/Cyberlorians/Sentinel/main/Connectors/CEF/cef_AMA_troubleshoot.py
 sudo python3 cef_AMA_troubleshoot.py
 ```
-
-
-
-
-
-
-
-
