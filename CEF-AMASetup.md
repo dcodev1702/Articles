@@ -1,4 +1,4 @@
-## Stream Comment Event Format (CEF) with Azure Monitor Agent (the helping hand guide). Authored by: Michael Crane and Lorenzo Ireland. ##
+## Stream Comment Event Format (CEF) with Azure Monitor Agent (the helping hand guide). Authored by: Michael Crane and [Lorenzo Ireland](https://github.com/dcodev1702). ##
 
 Many folks using Sentinel have issues with clarity around the Common Event Format (CEF) via AMA and rightfully so. This article deems to clear any confusion in both Azure Commercial and Goverment tenants. See CEF-AMA [here](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-ama).
 
