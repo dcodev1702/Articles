@@ -22,9 +22,9 @@ sudo apt install python3-dev rsyslog
 
 ```
 
-## Creating the Data Collection Rule.
+## Creating the Data Collection Rule (DCR).
 
-The DCR rule has to be in place first. Just create a simple syslog DCR and call it a day, as we will reconfiguring it later. Once created, allow some time for the AMA extension to be added to the machine and the syslog data to ingest into Sentinel before going onto the next step. 
+The DCR has to be in place first. Go to Azure Montior, scroll down on the left hand side and select "Data Collection Rule".  Create a simple syslog DCR and call it a day, as we will reconfigure it later. Once created, assign the Ubuntu VM to the DCR via "Resources" blade on your left hand side.  Allow some time for the AMA extension to be added to your Linux VM and the syslog data to ingest into Sentinel before moving onto the next step. 
 
 *Instructions* - [here](https://learn.microsoft.com/en-us/azure/sentinel/forward-syslog-monitor-agent)
 
