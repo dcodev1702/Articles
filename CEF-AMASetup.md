@@ -1,25 +1,24 @@
 ## Stream Comment Event Format (CEF) with Azure Monitor Agent (AMA) (the helping hand guide). Authored by: Michael Crane and [Lorenzo Ireland](https://github.com/dcodev1702). ##
 
-Many folks using Sentinel have issues with clarity around the Common Event Format (CEF) via AMA and rightfully so. This article deems to clear any confusion in both Azure Commercial and Goverment tenants. See CEF-AMA [here](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-ama).
+Many folks using Microsoft Sentinel have issues with clarity around the Common Event Format (CEF) via AMA and rightfully so. This article aims to clear any confusion for both Azure Commercial and Goverment tenants. See CEF-AMA [here](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-ama).
 
-*Disclaimer* - In Microsoft Sentinel, the CEF connector is only giving you instructions to create a DCR and looking for the ingestion on a flag. It is NOT a true connector. You will have manual work to do and this solution does work in Azure Government. 
+*Disclaimer* - In Microsoft Sentinel, the CEF connector is only giving you instructions to create a Data Collection Rule (DCR) and looking for the ingestion on a flag [e.g. CEF:]. It is NOT a true connector. You will have some manual work to do and this solution does work in Azure Government. 
 
-*Pre-req* - Create a Ubuntu VM, I am using Azure for this use case. Don't need anything crazy to keep the cost low for this use case. Being this is owned by the SecOps team, the VM lives within my SecOps subscription in Azure.
+*Pre-req* - Create a Ubuntu Virtual Machine (VM), I am using a Linux VM in Azure for this use case. If you want to use a Linux VM from on-premises, you will need to enroll that VM into Azure Arc so your on-premises resource can be managed in Azure.  You don't need anything crazy to keep the cost low for this use case / Proof of Concept (PoC). Being this is owned by the SecOps team, the VM lives within my SecOps subscription in Azure.
 
 ## CEF Setup on Ubuntu 22.04
 
 ```
-# Ssh to the new Ubuntu VM. The following commands can be copied and pasted into the ssh session.
+# Secure Shell (SSH) to your Ubuntu VM. The following commands can be copied and pasted via your SSH session.
 
 # Update/Upgrade System, if needed.
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 # Reboot
-sudo systemctl reboot
+sudo reboot
 
-# Check if Python 2.7/3 is installed and syslog-ng or rsyslog (rsyslog by default) 
-sudo apt install python3
-sudo apt install rsyslog
+# Check if Python 3 is installed and syslog-ng or rsyslog (rsyslog by default) 
+sudo apt install python3-dev rsyslog
 
 ```
 
