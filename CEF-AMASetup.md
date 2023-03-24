@@ -103,10 +103,10 @@ $DCRPUT = Invoke-RestMethod -Method ‘PUT’ $url -Body $json -Headers $headers
 
 ![](https://github.com/Cyberlorians/uploadedimages/blob/main/SentinelCEFProof.png)
 
-# Verify the connect is installed correctly, run the troubleshooting script w/ this command.
+# Verify that AMA <-> DCR is configured correctly, run the troubleshooting script w/ this command.
 # This script will also send a generic CEF message which after a few minutes, show up in your Log Analytics Workspace.
 # Keep in mind, you cannot use TCPDUMP on Azure, however, if you're Linux VM is on-premises, the script will sniff
-# your traffic for 20 seconds looking for CEF messages, if nonee are found, it will send off a generic CEF message.
+# your traffic for 20 seconds looking for CEF messages, if nonee are found, it will send off a generic CEF message as depicted above.
 
 Azure Commercial
 ```
