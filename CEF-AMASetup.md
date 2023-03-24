@@ -88,7 +88,7 @@ $DCRResponse | ConvertTo-JSON | Out-File "$(pwd).Path\cef-dcr.json"
 
 You can follow the directions [here](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-ama#request-body). 
 
-Edit and Notes: Where you see a RED dot, take not of the MSFT article and your changes according to yours. Below is an example. Make changes and save the file.
+Edit and Notes: Where you see a RED dot, take note of the MSFT article and your changes according to yours. Below is an example. Make changes and save the DCR (JSON) 'cef-dcr.json'. We are now going to send this modified DCR to Azure Monitor via the REST API PUT method.
 
 ![](https://github.com/Cyberlorians/uploadedimages/blob/main/cefdcredit.png)
 
