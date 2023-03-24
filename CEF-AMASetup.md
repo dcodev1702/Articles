@@ -38,7 +38,8 @@ The DCR has to be in place first. Go to Azure Montior, scroll down on the left h
 ## Run the following on your Linux VM, AFTER you have successfully created the DCR. 
 
 ```
-# Azure Commercial or Azure Goverment. The installation script configures the rsyslog or syslog-ng daemon to use the required protocol and restarts the daemon
+# Azure Commercial or Azure Goverment. The installation script configures the rsyslog 
+or syslog-ng daemon to use the required protocol and restarts the daemon
 sudo wget -O Forwarder_AMA_installer.py https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/DataConnectors/Syslog/Forwarder_AMA_installer.py
 sudo python3 Forwarder_AMA_installer.py 
 
@@ -93,7 +94,7 @@ $json = Get-Content -Path ./cef-dcr.json -Raw
 $DCRPUT = Invoke-RestMethod -Method ‘PUT’ $url -Body $json -Headers $headers -ContentType $ct
 ```
 
-# Confirm changes have been made by reading the overview/JSON on your DCR rule in Azure Monitor.
+# Confirm changes are successful by reading the overview/JSON on your DCR rule in Azure Monitor.
 
 ![](https://github.com/Cyberlorians/uploadedimages/blob/main/CEFcompleteDCR.png)
 
