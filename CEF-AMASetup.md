@@ -40,6 +40,7 @@ The DCR has to be in place first. Go to Azure Montior, scroll down on the left h
 ```
 # Azure Commercial or Azure Goverment. The installation script configures the rsyslog 
 or syslog-ng daemon to use the required protocol and restarts the daemon
+
 sudo wget -O Forwarder_AMA_installer.py https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/DataConnectors/Syslog/Forwarder_AMA_installer.py
 sudo python3 Forwarder_AMA_installer.py 
 
