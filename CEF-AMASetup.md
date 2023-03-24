@@ -1,4 +1,4 @@
-# Stream Comment Event Format (CEF) with Azure Monitor Agent (AMA) | The helping hand guide. #
+# Stream Common Event Format (CEF) with Azure Monitor Agent (AMA) | The helping hand guide. #
 
 ## Authored by: [Michael Crane](https://github.com/Cyberlorians) and [Lorenzo Ireland](https://github.com/dcodev1702). ##
 
