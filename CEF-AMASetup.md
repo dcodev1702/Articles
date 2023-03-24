@@ -66,16 +66,20 @@ if($AzContext.Environment.Name -eq 'AzureCloud') {
 } else {
     $resourceUrl = 'https://management.usgovcloudapi.net/'
 }
-    
+
+# Setup the JWT and Auth for the REST API GET/PUT calls 
 $token = (Get-AzAccessToken -ResourceUrl $resourceUrl).Token
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Authorization","Bearer $token")
-
 $ct = ‘application/json’
+
 $subscriptionId= ‘SubscriptionIDofWhereTheDCRLives’
 $resourceGroupName = 'RGofWhereTheDCRLives'
 $dataCollectionRuleName = ‘CEF-CHANGEME-DCR’
 $url = “$resourceUrl/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2019-11-01-preview”
+
+# Pull down the DCR we just created via Azure Monitor.  Save the DCR in a file called 'cef-dcr.json'
+# So we can modify this file and then push it back to Azure via a REST API PUT method.
 $DCRResponse = Invoke-RestMethod $url -Method GET -Headers $headers
 $DCRResponse | ConvertTo-JSON | Out-File "$(pwd).Path\cef-dcr.json"
 ```
