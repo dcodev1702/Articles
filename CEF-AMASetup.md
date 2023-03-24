@@ -20,6 +20,13 @@ sudo reboot
 # Check if Python 3 is installed and syslog-ng or rsyslog (rsyslog by default) 
 sudo apt install python3-dev rsyslog
 
+# Install PowerShell 7.3.X
+sudo snap install powershell --classic
+
+sudo pwsh
+
+install-module Az -Scope AllUsers -Force
+
 ```
 
 ## Creating the Data Collection Rule (DCR).
@@ -28,7 +35,7 @@ The DCR has to be in place first. Go to Azure Montior, scroll down on the left h
 
 *Instructions* - [here](https://learn.microsoft.com/en-us/azure/sentinel/forward-syslog-monitor-agent)
 
-## Run the following on your CEF machine, AFTER you have created the DCR rule. 
+## Run the following on your Linux VM, AFTER you have successfully created the DCR. 
 
 ```
 # Azure Commercial or Azure Goverment. The installation script configures the rsyslog or syslog-ng daemon to use the required protocol and restarts the daemon
@@ -37,7 +44,7 @@ sudo python3 Forwarder_AMA_installer.py
 
 ```
 # Edit the rsyslog or syslog-ng conf file. 
-On the Ubuntu server you will see it has been changed to CEF by uncommented modules and inputs. Confirm changes at: 'cat /etc/rsyslog.conf'
+On the Ubuntu VM (server) you will see it has been changed to CEF by uncommented modules and inputs. Confirm changes: 'cat /etc/rsyslog.conf'
 
 ![](https://github.com/Cyberlorians/uploadedimages/blob/main/cefmagrsyslog.png)
 
@@ -45,37 +52,32 @@ On the Ubuntu server you will see it has been changed to CEF by uncommented modu
 
 *PreReqs* - PowerShell, Az Module.
 
-GET Request URL and Header - **Azure Commercial** 
+GET Request URL and Header - **Azure Commercial or Azure USGovernment** 
  
 ```
-Connect-AzAccount -Environment Azure -UseDeviceAuthentication
-$token = (Get-AzAccessToken -ResourceUrl 'https://management.azure.com').Token
+$environment = CHANGE ME TO -> 'AzureCloud' or 'AzureUSGovernment'
+Connect-AzAccount -Environment $environment -UseDeviceAuthentication
+
+# Get Azure Access (JWT) Token for API Auth/Access 
+if($AzContext.Environment.Name -eq 'AzureCloud') {
+    $resourceUrl = 'https://management.azure.com'
+} else {
+    $resourceUrl = 'https://management.usgovcloudapi.net/'
+}
+    
+$token = (Get-AzAccessToken -ResourceUrl $resourceUrl).Token
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Authorization","Bearer $token")
+
 $ct = ‘application/json’
 $subscriptionId= ‘SubscriptionIDofWhereTheDCRLives’
 $resourceGroupName = 'RGofWhereTheDCRLives'
-$dataCollectionRuleName = ‘CEF-DCR-Name’
-$url = “https://management.azure.com/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2019-11-01-preview”
-$DCRResponse = Invoke-RestMethod $url -Method 'Get' -Headers $headers
-$DCRResponse | ConvertTo-JSON | Out-File "$(pwd).Path\dcr.json"
+$dataCollectionRuleName = ‘CEF-CHANGEME-DCR’
+$url = “$resourceUrl/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2019-11-01-preview”
+$DCRResponse = Invoke-RestMethod $url -Method GET -Headers $headers
+$DCRResponse | ConvertTo-JSON | Out-File "$(pwd).Path\cef-dcr.json"
 ```
 
-GET Request URL and Header - **Azure Government**  
-
-```
-Connect-AzAccount -Environment AzureUSGovernment -UseDeviceAuthentication
-$token = (Get-AzAccessToken -ResourceUrl 'https://management.usgovcloudapi.net').Token
-$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-$headers.Add("Authorization","Bearer $token")
-$ct = ‘application/json’
-$subscriptionId= ‘SubscriptionIDofWhereTheDCRLives’
-$resourceGroupName = 'RGofWhereTheDCRLives'
-$dataCollectionRuleName = ‘CEF-DCR-Name’
-$url = “https://management.usgovcloudapi.net/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2019-11-01-preview”
-$DCRResponse = Invoke-RestMethod $url -Method 'Get' -Headers $headers
-$DCRResponse | ConvertTo-JSON | Out-File "$(pwd).Path\dcr.json"
-```
 # Reading the Request Body and make edits
 
 You can follow the directions [here](https://learn.microsoft.com/en-us/azure/sentinel/connect-cef-ama#request-body). 
@@ -87,7 +89,7 @@ Edit and Notes: Where you see a RED dot, take not of the MSFT article and your c
 # PUT Request Body - **This is the same for any Azure Environment**
 
 ```
-$json = Get-Content c:\tools\dcrcefapi.json
+$json = Get-Content -Path ./cef-dcr.json -Raw
 $DCRPUT = Invoke-RestMethod -Method ‘PUT’ $url -Body $json -Headers $headers -ContentType $ct
 ```
 
@@ -102,6 +104,9 @@ $DCRPUT = Invoke-RestMethod -Method ‘PUT’ $url -Body $json -Headers $headers
 ![](https://github.com/Cyberlorians/uploadedimages/blob/main/SentinelCEFProof.png)
 
 # Verify the connect is installed correctly, run the troubleshooting script w/ this command.
+# This script will also send a generic CEF message which after a few minutes, show up in your Log Analytics Workspace.
+# Keep in mind, you cannot use TCPDUMP on Azure, however, if you're Linux VM is on-premises, the script will sniff
+# your traffic for 20 seconds looking for CEF messages, if nonee are found, it will send off a generic CEF message.
 
 Azure Commercial
 ```
@@ -114,11 +119,3 @@ Azure Government
 sudo wget -O cef_AMA_troubleshoot.py https://raw.githubusercontent.com/Cyberlorians/Sentinel/main/Connectors/CEF/cef_AMA_troubleshoot.py
 sudo python3 cef_AMA_troubleshoot.py
 ```
-
-
-
-
-
-
-
-
