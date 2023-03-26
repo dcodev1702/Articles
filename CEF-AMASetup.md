@@ -78,7 +78,7 @@ $ct = ‘application/json’
 $subscriptionId= ‘SubscriptionIDofWhereTheDCRLives’
 $resourceGroupName = 'RGofWhereTheDCRLives'
 $dataCollectionRuleName = ‘CEF-CHANGEME-DCR’
-$url = “$resourceUrl/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2019-11-01-preview”
+$url = “$resourceUrl/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.Insights/dataCollectionRules/$($dataCollectionRuleName)?api-version=2021-09-01-preview”
 
 # Pull down the DCR we just created via Azure Monitor.  Save the DCR in a file called 'cef-dcr.json'
 # So we can modify this file and then push it back to Azure via a REST API PUT method.
